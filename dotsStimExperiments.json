@@ -6,10 +6,10 @@
 		"url": "https://github.com/aernesto/dotsStimExperiments.git"
 	},
 	{
-		"name": "lmu_forked",
-		"flavor": "Adrian_tests",
+		"name": "lmc_forked",
+		"flavor": "Adrian_Tests",
 		"type": "git",
-		"url": "https://github.com/aernesto/Lab-Matlab-Utilities.git",
-		"toolboxRoot": "#lmu_forked_Adrian_tests" 
+		"url": "https://github.com/aernesto/Lab-Matlab-Control.git",
+		"toolboxRoot": "#lmc_forked_Adrian_Tests" 
 	}
 ]
