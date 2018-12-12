@@ -13,6 +13,13 @@
 		"toolboxRoot": "#lmc_forked_Adrian_Tests" 
 	},
 	{
+		"name": "lmu_forked",
+        "flavor": "Adrian_tests",
+		"type": "git",
+		"url": "https://github.com/aernesto/Lab-Matlab-Utilities.git",
+		"toolboxRoot": "#lmc_forked_Adrian_tests" 
+	},
+	{
 		"name": "mgl",
 		"type": "git",
 		"url": "https://github.com/justingardner/mgl.git"
