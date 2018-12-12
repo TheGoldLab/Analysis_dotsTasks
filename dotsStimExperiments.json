@@ -6,22 +6,19 @@
 		"url": "https://github.com/aernesto/dotsStimExperiments.git"
 	},
 	{
-		"name": "lmc_forked",
-        "flavor": "Adrian_Tests",
+		"flavor": "",
+		"name": "Lab-Matlab-Control",
 		"type": "git",
-		"url": "https://github.com/aernesto/Lab-Matlab-Control.git",
-		"toolboxRoot": "#lmc_forked_Adrian_Tests" 
-	},
-	{
-		"name": "lmu_forked",
-        "flavor": "Adrian_tests",
-		"type": "git",
-		"url": "https://github.com/aernesto/Lab-Matlab-Utilities.git",
-		"toolboxRoot": "#lmc_forked_Adrian_tests" 
+		"url": "https://github.com/TheGoldLab/Lab-Matlab-Control.git"
 	},
 	{
 		"name": "mgl",
 		"type": "git",
 		"url": "https://github.com/justingardner/mgl.git"
+	},
+	{
+		"name": "Lab-Matlab-Utilities",
+		"type": "git",
+		"url": "https://github.com/TheGoldLab/Lab-Matlab-Utilities.git" 
 	}
 ]
