@@ -1,0 +1,15 @@
+[
+	{
+		"name": "dotsStimExperiments",
+		"type": "git",
+		"update": "never",
+		"url": "https://github.com/aernesto/dotsStimExperiments.git"
+	},
+	{
+		"name": "lmu_forked",
+		"flavor": "Adrian_tests",
+		"type": "git",
+		"url": "https://github.com/aernesto/Lab-Matlab-Utilities.git",
+		"toolboxRoot": "#lmu_forked_Adrian_tests" 
+	}
+]
