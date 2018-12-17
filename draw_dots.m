@@ -1,4 +1,4 @@
-function ret = draw_dots(dotsParams)
+function ret = draw_dots(dotsParams, displayIndex)
 
 % create a kinetogram
 clean = dotsDrawableDotKinetogram();
@@ -6,7 +6,9 @@ clean = dotsDrawableDotKinetogram();
 clean.stencilNumber = dotsParams.stencilNumber;
 clean.pixelSize = dotsParams.pixelSize;
 clean.diameter = dotsParams.diameter;
+
 clean.density = dotsParams.density;
+clean.speed = dotsParams.speed;
 
 clean.yCenter = dotsParams.yCenter;
 clean.xCenter = dotsParams.xCenter;
@@ -34,14 +36,15 @@ try
     % get a drawing window
     %sc=dotsTheScreen.theObject;
     %sc.reset('displayIndex', 2);
-    dotsTheScreen.reset('displayIndex', 0);
+    dotsTheScreen.reset('displayIndex', displayIndex);
     dotsTheScreen.openWindow();
     
     % get the objects ready to use the window
     kinetograms.callObjectMethod(@prepareToDrawInWindow);
     
     % let the ensemble animate for a while
-    time = mglGetSecs; NN=1000; ret=cell(1,NN); i=1;
+    frameRate = 100; % way overestimated on purpose
+    time = mglGetSecs; NN=ceil(frameRate*dotsParams.dotsDuration); ret=cell(1,NN); i=1;
     while mglGetSecs < time + dotsParams.dotsDuration
         ret{i} = dotsDrawable.drawFrame(kinetograms.objects);
         i=i+1;
