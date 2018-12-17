@@ -14,15 +14,15 @@ clear all
 % dotsOff-dotsOn
 
 dotsParams.stencilNumber = 1;
-dotsParams.pixelSize = 10;
+dotsParams.pixelSize = 2;
 dotsParams.diameter = 10;
-dotsParams.speed = 5;
+dotsParams.speed = 1;
 dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
-dotsParams.density = 1;
+dotsParams.density = 60;
 dotsParams.direction = 180;
-dotsParams.coherence = 100;
-dotsParams.dotsDuration = 4;
+dotsParams.coherence = 0;
+dotsParams.dotsDuration = 2;
 dotsParams.randSeedBase = 1;
 
 displayIndex = 1;
@@ -48,10 +48,12 @@ else
 end
 
 % loop over frames and construct a t-x matrix
-length_x=201; % size of x dimension (MUST BE ODD)
+length_x=1001; % size of x dimension (MUST BE ODD)
 txMatrix=zeros(length_t,length_x);
+xytMatrix = zeros(length_x,length_x, length_t); % x-y-t
 for ii=1:numFrames
     dotsMatrix = inspect_dotsFrameMatrix(info_frames, ii, length_x, false);
+    xytMatrix(:,:,ii) = dotsMatrix>0;
     txMatrix(ii,:) = sum(dotsMatrix,1)>0; % project all dots onto x-axis
 end
 
@@ -60,3 +62,19 @@ if addTrivialFrame
 end
 
 MotionEnergy_1(txMatrix, (length_x-1)/2, (length_t-1)/2);
+
+%% Redraw the dots, out of the 3D matrix gathered by snow-dots
+% inspired from this post
+% https://www.mathworks.com/matlabcentral/answers/326813-3d-matrix-to-video#answer_256221
+figure();
+v = VideoWriter('dots_reconstructed_5.avi');
+open(v);
+imagesc(xytMatrix(:,:,1))
+axis tight manual 
+set(gca,'nextplot','replacechildren');
+for k = 2:numFrames 
+   imagesc(xytMatrix(:,:,k))
+   frame = getframe;
+   writeVideo(v,frame);
+end
+close(v);
