@@ -7,10 +7,10 @@
 	},
 	{
 		"name": "lmc_forked",
-        "flavor": "Adrian_Tests",
+        "flavor": "return_dots_matrix",
 		"type": "git",
 		"url": "https://github.com/aernesto/Lab-Matlab-Control.git",
-		"toolboxRoot": "#lmc_forked_Adrian_Tests" 
+		"toolboxRoot": "#lmc_forked_return_dots_matrix" 
 	},
 	{
 		"name": "lmu_forked",
