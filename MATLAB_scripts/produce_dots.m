@@ -21,7 +21,7 @@ dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
 dotsParams.density = 1;
 dotsParams.direction = 0;
-dotsParams.coherence = 0;
+dotsParams.coherence = 100;
 dotsParams.dotsDuration = 1;
 dotsParams.randSeedBase = 1;
 
@@ -31,17 +31,66 @@ displayIndex = 1;
 info_frames=draw_dots(dotsParams, displayIndex);
 
 
-
 %% Dump all stimulus data that will be used by our data analysis in R
+
+clear all
+fileName = 'detail_1';
+fileToLoad = [fileName,'.mat'];
+fileToWrite = [fileName,'.csv'];
+
+load(fileToLoad)
+
+% count number of frames actually drawn
+numFrames=count_frames(info_frames);
+
+% column names in final csv file
+colNames={'frameIdx', ...
+          'onsetTime', ...
+          'onsetFrame', ...
+          'swapTime', ...
+          'isTight', ...
+          'dotIdx', ...
+          'xpos', ...
+          'ypos'};
+
+numCols=length(colNames);
+
+% build matrix that will be dumped as a csv file
+
+bigNumber = 10000 * numFrames; % overestimate of the number of dots
+dataMatrix = zeros(bigNumber,numCols);
+
+matrixRow = 1;
+
+for frameIdx = 1:numFrames
+    currFrame = info_frames{frameIdx};
+    
+    % 2-by-numDots matrix for current frame
+    dotsMatrix = currFrame.dotsFrameMatrix;
+    
+    numRowsForThisFrame = size(dotsMatrix,2);
+    
+    % prepare all but last 3 cols of the 'standard row' to fill
+    standardRow = [frameIdx, currFrame.onsetTime, currFrame.onsetFrame,...
+        currFrame.swapTime, currFrame.isTight];
+    
+    for dotIdx = 1:numRowsForThisFrame
+        varyingRow = [dotIdx, dotsMatrix(:,dotIdx)'];
+        dataMatrix(matrixRow,:) = [standardRow, varyingRow];
+        matrixRow = matrixRow + 1;
+    end
+end
+
+dataMatrix = dataMatrix(1:matrixRow-1, :);
+
+T=array2table(dataMatrix, 'VariableNames', colNames);
+writetable(T,fileToWrite,'WriteRowNames',true) 
+
 
 
 %% Construct stimulus matrix to feed the ME calculator from George Mather
 % count number of frames actually drawn
-numFrames=1;
-while ~isempty(info_frames{numFrames})
-    numFrames = numFrames+1;
-end
-numFrames = numFrames - 1; % correct for last increment of while loop
+numFrames=count_frames(info_frames);
 
 % boolean needed because of the structure of the ME calculation
 if ~mod(numFrames,2) % true if numFrames is even
