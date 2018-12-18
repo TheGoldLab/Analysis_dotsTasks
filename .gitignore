@@ -1,3 +1,4 @@
 figs/*
 .DS_Store
 *.mat
+data/*
