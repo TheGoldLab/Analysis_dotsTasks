@@ -1,4 +1,4 @@
-%% AIM: write a script that displays the dots stimulus from a specific trial
+%% AIM: write a script that displays the dots stimulus and saves useful info about the stimulus
 
 clear all
 
@@ -14,15 +14,15 @@ clear all
 % dotsOff-dotsOn
 
 dotsParams.stencilNumber = 1;
-dotsParams.pixelSize = 2;
+dotsParams.pixelSize = 5;
 dotsParams.diameter = 10;
 dotsParams.speed = 1;
 dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
-dotsParams.density = 60;
-dotsParams.direction = 180;
-dotsParams.coherence = 0;
-dotsParams.dotsDuration = 2;
+dotsParams.density = 1;
+dotsParams.direction = 0;
+dotsParams.coherence = 100;
+dotsParams.dotsDuration = 1;
 dotsParams.randSeedBase = 1;
 
 displayIndex = 1;
@@ -30,7 +30,12 @@ displayIndex = 1;
 %% Draw the dots
 info_frames=draw_dots(dotsParams, displayIndex);
 
-%% Construct stimulus matrix to feed the ME calculator
+
+
+%% Dump all stimulus data that will be used by our data analysis in R
+
+
+%% Construct stimulus matrix to feed the ME calculator from George Mather
 % count number of frames actually drawn
 numFrames=1;
 while ~isempty(info_frames{numFrames})
@@ -47,8 +52,8 @@ else
     length_t = numFrames;
 end
 
-% loop over frames and construct a t-x matrix
-length_x=1001; % size of x dimension (MUST BE ODD)
+% loop over frames and construct both a t-x and a xyt matrix
+length_x=501; % size of x dimension (MUST BE ODD)
 txMatrix=zeros(length_t,length_x);
 xytMatrix = zeros(length_x,length_x, length_t); % x-y-t
 for ii=1:numFrames
@@ -66,6 +71,7 @@ MotionEnergy_1(txMatrix, (length_x-1)/2, (length_t-1)/2);
 %% Redraw the dots, out of the 3D matrix gathered by snow-dots
 % inspired from this post
 % https://www.mathworks.com/matlabcentral/answers/326813-3d-matrix-to-video#answer_256221
+% NOTE: this module will create/write the file v below
 figure();
 v = VideoWriter('dots_reconstructed_5.avi');
 open(v);
