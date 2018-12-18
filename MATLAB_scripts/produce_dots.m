@@ -21,7 +21,7 @@ dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
 dotsParams.density = 1;
 dotsParams.direction = 0;
-dotsParams.coherence = 100;
+dotsParams.coherence = 70;
 dotsParams.dotsDuration = 1;
 dotsParams.randSeedBase = 1;
 
@@ -33,12 +33,12 @@ info_frames=draw_dots(dotsParams, displayIndex);
 
 %% Dump all stimulus data that will be used by our data analysis in R
 
-clear all
-fileName = 'detail_2';
-fileToLoad = [fileName,'.mat'];
+%clear all
+fileName = 'detail_3';
+%fileToLoad = [fileName,'.mat'];
 fileToWrite = [fileName,'.csv'];
 
-load(fileToLoad)
+%load(fileToLoad)
 
 % count number of frames actually drawn
 numFrames=count_frames(info_frames);
