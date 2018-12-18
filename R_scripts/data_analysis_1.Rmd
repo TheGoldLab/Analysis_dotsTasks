@@ -15,7 +15,7 @@ library(ggplot2)
 ```
 Load a data file
 ```{r}
-dataTag <- "detail_2"
+dataTag <- "detail_3"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
