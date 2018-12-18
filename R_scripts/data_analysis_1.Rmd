@@ -1,0 +1,100 @@
+---
+title: "Basic analysis of the dots stimulus"
+output:
+  html_notebook:
+    toc: true
+    code_folding: hide
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: Adrian Radillo
+---
+
+Load required libraries
+```{r}
+library(data.table)
+library(ggplot2)
+```
+Load a data file
+```{r}
+dataTag <- "detail_1"
+datafile <- paste("../data/",dataTag,".csv",sep='')
+data <- fread(file=datafile, header=TRUE, sep=",")
+# uncomment next line to inspect data table
+str(data)
+```
+# Basic questions
+Here, I ask basic questions about the stimulus produced [here](https://github.com/aernesto/dotsStimExperiments/releases).
+
+**Display frame number as stored by snow-dots**
+```{r}
+axes_labels_font <- 18
+axes_font <- 15
+
+ggplot(data, aes(x=frameIdx,y=onsetFrame)) +
+  geom_line(size=.2) +
+  geom_point(aes(col=factor(isTight)),size=2) +
+  labs(title="snow-dots frame vs. sequential order",
+         subtitle=paste("From",dataTag,"dataset",sep=" "),
+         y="'onsetFrame' by snow-dots",
+         x="frame index in sequence",
+         color="isTight") + theme(plot.title=element_text(size=20,
+                                    family="American Typewriter",
+                                    color="tomato",
+                                    lineheight=1.2),  # title
+            plot.subtitle=element_text(size=15,
+                                       family="American Typewriter"),  # subtitle
+            plot.caption=element_text(size=15),  # caption
+            axis.title.x=element_text(size=axes_labels_font),  # X axis title
+            axis.title.y=element_text(size=axes_labels_font),  # Y axis title
+            axis.text.x=element_text(size=axes_font),  # X axis text
+            axis.text.y=element_text(size=axes_font))  # Y axis text
+```
+The jumps in `onsetFrame` at `isTight=0` frames are 7 for frame 1 and 3 for frame 5.
+
+
+**What are the sequences of time intervals `swapTime(n) - onsetTime(n)` and `onsetTime(n+1) - swapTime(n)`?**
+Note: clearly I am not understanding something important here.
+```{r}
+frameDurations <- data[,.(frameDur=swapTime - onsetTime), by=frameIdx]
+ggplot(frameDurations, aes(x=frameIdx,y=frameDur)) +
+  geom_line(size=.2) +
+  geom_point(size=2) +
+  labs(title="frame durations in sequential order",
+         subtitle=paste("From",dataTag,"dataset",sep=" "),
+         y="swapTime(n) - onsetTime(n)",
+         x="frame index in sequence") + theme(plot.title=element_text(size=20,
+                                    family="American Typewriter",
+                                    color="tomato",
+                                    lineheight=1.2),  # title
+            plot.subtitle=element_text(size=15,
+                                       family="American Typewriter"),  # subtitle
+            plot.caption=element_text(size=15),  # caption
+            axis.title.x=element_text(size=axes_labels_font),  # X axis title
+            axis.title.y=element_text(size=axes_labels_font),  # Y axis title
+            axis.text.x=element_text(size=axes_font),  # X axis text
+            axis.text.y=element_text(size=axes_font))  # Y axis text
+```
+
+**Display dots in a few frames**
+```{r}
+totFrames <- data[,max(frameIdx)]
+numFramesToPlot <- totFrames
+g <- ggplot(data[frameIdx < numFramesToPlot+1], aes(x=xpos, y=ypos)) +
+  geom_point(aes(col=frameIdx),size=3) + xlim(0,1) + ylim(0,1)
+# Add Title and Labels
+g + labs(title=paste("Dots from first ",numFramesToPlot," frames",sep = ''),
+         subtitle=paste("From",dataTag,"dataset",sep=" "),
+         y="normalized ypos",
+         x="normalized xpos",
+         color="frame") + theme(plot.title=element_text(size=20,
+                                    family="American Typewriter",
+                                    color="tomato",
+                                    lineheight=1.2),  # title
+            plot.subtitle=element_text(size=15,
+                                       family="American Typewriter"),  # subtitle
+            plot.caption=element_text(size=15),  # caption
+            axis.title.x=element_text(size=axes_labels_font),  # X axis title
+            axis.title.y=element_text(size=axes_labels_font),  # Y axis title
+            axis.text.x=element_text(size=axes_font),  # X axis text
+            axis.text.y=element_text(size=axes_font))  # Y axis text
+```
+
