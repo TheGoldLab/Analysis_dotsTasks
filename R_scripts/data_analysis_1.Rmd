@@ -15,7 +15,7 @@ library(ggplot2)
 ```
 Load a data file
 ```{r}
-dataTag <- "detail_1"
+dataTag <- "detail_2"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
@@ -48,7 +48,7 @@ ggplot(data, aes(x=frameIdx,y=onsetFrame)) +
             axis.text.x=element_text(size=axes_font),  # X axis text
             axis.text.y=element_text(size=axes_font))  # Y axis text
 ```
-The jumps in `onsetFrame` at `isTight=0` frames are 7 for frame 1 and 3 for frame 5.
+The jumps in `onsetFrame` at `isTight=0` frames are *???*
 
 
 **What are the sequences of time intervals `swapTime(n) - onsetTime(n)` and `onsetTime(n+1) - swapTime(n)`?**
