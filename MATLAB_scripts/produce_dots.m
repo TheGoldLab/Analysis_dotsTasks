@@ -34,7 +34,7 @@ info_frames=draw_dots(dotsParams, displayIndex);
 %% Dump all stimulus data that will be used by our data analysis in R
 
 clear all
-fileName = 'detail_1';
+fileName = 'detail_2';
 fileToLoad = [fileName,'.mat'];
 fileToWrite = [fileName,'.csv'];
 
