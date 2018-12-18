@@ -21,7 +21,7 @@ dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
 dotsParams.density = 1;
 dotsParams.direction = 0;
-dotsParams.coherence = 100;
+dotsParams.coherence = 0;
 dotsParams.dotsDuration = 1;
 dotsParams.randSeedBase = 1;
 
