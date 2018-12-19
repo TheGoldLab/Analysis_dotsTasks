@@ -15,6 +15,7 @@ clean.xCenter = dotsParams.xCenter;
 
 clean.direction = dotsParams.direction;
 clean.coherence = dotsParams.coherence;
+clean.coherenceSTD = dotsParams.coherenceSTD;
 
 clean.randBase = dotsParams.randSeedBase;
 % as of 12/13/18, this base random seed is used as described in this line:

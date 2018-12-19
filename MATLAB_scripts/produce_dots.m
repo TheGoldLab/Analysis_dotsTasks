@@ -9,21 +9,20 @@ clear all
 % endDirection
 % presenceCP
 % timeCP
-% randSeedBase
-% coherenceSTD
 % dotsOff-dotsOn
 
 dotsParams.stencilNumber = 1;
 dotsParams.pixelSize = 5;
 dotsParams.diameter = 10;
-dotsParams.speed = 1;
+dotsParams.speed = 3;
 dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
-dotsParams.density = 1;
+dotsParams.density = 70;
 dotsParams.direction = 0;
-dotsParams.coherence = 70;
-dotsParams.dotsDuration = 1;
+dotsParams.coherence = 50;
+dotsParams.dotsDuration = .1; % in sec
 dotsParams.randSeedBase = 1;
+dotsParams.coherenceSTD = 0; % I don't know what that is
 
 displayIndex = 1;
 
@@ -34,7 +33,7 @@ info_frames=draw_dots(dotsParams, displayIndex);
 %% Dump all stimulus data that will be used by our data analysis in R
 
 %clear all
-fileName = 'detail_3';
+fileName = 'detail_4';
 %fileToLoad = [fileName,'.mat'];
 fileToWrite = [fileName,'.csv'];
 
