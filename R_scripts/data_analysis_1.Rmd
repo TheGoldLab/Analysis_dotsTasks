@@ -15,7 +15,7 @@ library(ggplot2)
 ```
 Load a data file
 ```{r}
-dataTag <- "detail_3"
+dataTag <- "detail_4"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
@@ -51,7 +51,7 @@ ggplot(data, aes(x=frameIdx,y=onsetFrame)) +
 The jumps in `onsetFrame` at `isTight=0` frames are *???*
 
 
-**What are the sequences of time intervals `swapTime(n) - onsetTime(n)` and `onsetTime(n+1) - swapTime(n)`?**
+**What are the sequences of time intervals `swapTime(n) - onsetTime(n)` and `onsetTime(n+1) - swapTime(n)`?**  
 Note: clearly I am not understanding something important here.
 ```{r}
 frameDurations <- data[,.(frameDur=swapTime - onsetTime), by=frameIdx]
@@ -74,27 +74,65 @@ ggplot(frameDurations, aes(x=frameIdx,y=frameDur)) +
             axis.text.y=element_text(size=axes_font))  # Y axis text
 ```
 
-**Display dots in a few frames**
-```{r}
+**Display dots in a few frames**  
+Let us first recall the parameters of the dots used in this dataset:  
+stencilNumber: 1  (not modeled here)  
+pixelSize: 5  
+diameter: 10  
+speed: 3  
+yCenter: 0  
+xCenter: 0  
+density: 70  
+direction: 0  
+coherence: 50  
+dotsDuration: 0.1  
+randSeedBase: 1  
+coherenceSTD: 0  
+
+Now we display the dots with their normalized position
+```{r, fig.height=20, fig.width=20}
 totFrames <- data[,max(frameIdx)]
-numFramesToPlot <- totFrames
+numFramesToPlot <- 2#totFrames
 g <- ggplot(data[frameIdx < numFramesToPlot+1], aes(x=xpos, y=ypos)) +
-  geom_point(aes(col=frameIdx),size=3) + xlim(0,1) + ylim(0,1)
+  geom_point(aes(shape=factor(frameIdx),col=frameIdx),size=6) + xlim(0,1) + ylim(0,1)
 # Add Title and Labels
 g + labs(title=paste("Dots from first ",numFramesToPlot," frames",sep = ''),
          subtitle=paste("From",dataTag,"dataset",sep=" "),
          y="normalized ypos",
          x="normalized xpos",
-         color="frame") + theme(plot.title=element_text(size=20,
-                                    family="American Typewriter",
-                                    color="tomato",
-                                    lineheight=1.2),  # title
-            plot.subtitle=element_text(size=15,
-                                       family="American Typewriter"),  # subtitle
-            plot.caption=element_text(size=15),  # caption
-            axis.title.x=element_text(size=axes_labels_font),  # X axis title
-            axis.title.y=element_text(size=axes_labels_font),  # Y axis title
-            axis.text.x=element_text(size=axes_font),  # X axis text
-            axis.text.y=element_text(size=axes_font))  # Y axis text
+         color="frame", shape="frame") + 
+  theme(plot.title=element_text(size=40,family="American Typewriter",
+                                color="tomato", lineheight=1.2),  # title
+        plot.subtitle=element_text(size=30, family="American Typewriter"),  # subtitle
+        plot.caption=element_text(size=30),  # caption
+        axis.title.x=element_text(size=2*axes_labels_font),  # X axis title
+        axis.title.y=element_text(size=2*axes_labels_font),  # Y axis title
+        axis.text.x=element_text(size=2*axes_font),  # X axis text
+        axis.text.y=element_text(size=2*axes_font),  # Y axis text
+        legend.text=element_text(size=1.5*axes_font),
+        legend.title=element_text(size=1.5*axes_font))
 ```
-
+```{r, fig.height=20, fig.width=20}
+totFrames <- data[,max(frameIdx)]
+numFramesToPlot <- 3#totFrames
+g <- ggplot(data[frameIdx < numFramesToPlot+1], aes(x=xpos, y=ypos)) +
+  geom_point(aes(shape=factor(frameIdx),col=frameIdx),size=6, stroke=2) +
+  scale_shape_manual(values=c(3, 0, 2)) + # refs for shapes: http://www.sthda.com/english/wiki/ggplot2-point-shapes  &   https://stackoverflow.com/a/34361768
+  xlim(0,1) + ylim(0,1)
+# Add Title and Labels
+g + labs(title=paste("Dots from first ",numFramesToPlot," frames",sep = ''),
+         subtitle=paste("From",dataTag,"dataset",sep=" "),
+         y="normalized ypos",
+         x="normalized xpos",
+         color="frame", shape="frame") + 
+  theme(plot.title=element_text(size=40,family="American Typewriter",
+                                color="tomato", lineheight=1.2),  # title
+        plot.subtitle=element_text(size=30, family="American Typewriter"),  # subtitle
+        plot.caption=element_text(size=30),  # caption
+        axis.title.x=element_text(size=2*axes_labels_font),  # X axis title
+        axis.title.y=element_text(size=2*axes_labels_font),  # Y axis title
+        axis.text.x=element_text(size=2*axes_font),  # X axis text
+        axis.text.y=element_text(size=2*axes_font),  # Y axis text
+        legend.text=element_text(size=1.5*axes_font),
+        legend.title=element_text(size=1.5*axes_font))
+```
