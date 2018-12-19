@@ -15,7 +15,7 @@ library(ggplot2)
 ```
 Load a data file
 ```{r}
-dataTag <- "detail_4"
+dataTag <- "detail_5"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
@@ -76,31 +76,31 @@ ggplot(frameDurations, aes(x=frameIdx,y=frameDur)) +
 
 **Display dots in a few frames**  
 Let us first recall the parameters of the dots used in this dataset:  
-stencilNumber: 1  (not modeled here)  
-pixelSize: 5  
-diameter: 10  
-speed: 3  
-yCenter: 0  
-xCenter: 0  
-density: 70  
-direction: 0  
-coherence: 50  
-dotsDuration: 0.1  
-randSeedBase: 1  
-coherenceSTD: 0  
+    stencilNumber: 1 (not modeled here)
+        pixelSize: 5
+         diameter: 10
+            speed: 1
+          yCenter: 0
+          xCenter: 0
+          density: 70
+        direction: 0
+        coherence: 50
+     dotsDuration: 0.1000
+     randSeedBase: 1
+     coherenceSTD: 0
 
 Now we display the dots with their normalized position
 ```{r, fig.height=20, fig.width=20}
 totFrames <- data[,max(frameIdx)]
-numFramesToPlot <- 2#totFrames
+numFramesToPlot <- totFrames
 g <- ggplot(data[frameIdx < numFramesToPlot+1], aes(x=xpos, y=ypos)) +
-  geom_point(aes(shape=factor(frameIdx),col=frameIdx),size=6) + xlim(0,1) + ylim(0,1)
+  geom_point(aes(col=frameIdx),size=6) + xlim(0,1) + ylim(0,1)
 # Add Title and Labels
 g + labs(title=paste("Dots from first ",numFramesToPlot," frames",sep = ''),
          subtitle=paste("From",dataTag,"dataset",sep=" "),
          y="normalized ypos",
          x="normalized xpos",
-         color="frame", shape="frame") + 
+         color="frame") + 
   theme(plot.title=element_text(size=40,family="American Typewriter",
                                 color="tomato", lineheight=1.2),  # title
         plot.subtitle=element_text(size=30, family="American Typewriter"),  # subtitle
