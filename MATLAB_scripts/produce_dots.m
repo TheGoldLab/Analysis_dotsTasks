@@ -14,7 +14,7 @@ clear all
 dotsParams.stencilNumber = 1;
 dotsParams.pixelSize = 5;
 dotsParams.diameter = 10;
-dotsParams.speed = 3;
+dotsParams.speed = 1;
 dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
 dotsParams.density = 70;
@@ -33,7 +33,8 @@ info_frames=draw_dots(dotsParams, displayIndex);
 %% Dump all stimulus data that will be used by our data analysis in R
 
 %clear all
-fileName = 'detail_4';
+fileName = 'detail_5';
+save([fileName,'.mat'])
 %fileToLoad = [fileName,'.mat'];
 fileToWrite = [fileName,'.csv'];
 
