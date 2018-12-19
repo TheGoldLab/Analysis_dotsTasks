@@ -15,7 +15,7 @@ library(ggplot2)
 ```
 Load a data file
 ```{r}
-dataTag <- "detail_5"
+dataTag <- "detail_1"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
@@ -76,18 +76,18 @@ ggplot(frameDurations, aes(x=frameIdx,y=frameDur)) +
 
 **Display dots in a few frames**  
 Let us first recall the parameters of the dots used in this dataset:  
-    stencilNumber: 1 (not modeled here)
-        pixelSize: 5
-         diameter: 10
-            speed: 1
-          yCenter: 0
-          xCenter: 0
-          density: 70
-        direction: 0
-        coherence: 50
-     dotsDuration: 0.1000
-     randSeedBase: 1
-     coherenceSTD: 0
+    stencilNumber: 1 (not modeled here)  
+        pixelSize: ?  
+         diameter: ?  
+            speed: 1  
+          yCenter: 0  
+          xCenter: 0  
+          density: 1  
+        direction: ?  
+        coherence: 100  
+     dotsDuration: 1  
+     randSeedBase: 1  
+     coherenceSTD: ?  
 
 Now we display the dots with their normalized position
 ```{r, fig.height=20, fig.width=20}
