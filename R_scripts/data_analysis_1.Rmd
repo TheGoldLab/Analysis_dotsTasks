@@ -44,12 +44,8 @@ kable(dotsParam, format='html', align = c('l','c'), digits = 0,
       col.names = c("par","val"))
 ```
 
-
-
-
-
 # Basic questions
-## 1. Display frame number as stored by snow-dots
+## 1. Frame number 
 ```{r}
 axes_labels_font <- 18
 axes_font <- 15
@@ -82,8 +78,7 @@ hist(skipSize, breaks = seq(from = min(skipSize) - offset, to = max(skipSize) + 
 ```
 
 
-
-**What are the sequences of time intervals `swapTime(n) - onsetTime(n)` and `onsetTime(n+1) - swapTime(n)`?**  
+## 2. Frame durations  
 ```{r}
 frameDurations <- data[,.(frameDur=onsetTime-swapTime), by=frameIdx]
 ggplot(frameDurations, aes(x=frameIdx,y=frameDur)) +
@@ -105,7 +100,7 @@ ggplot(frameDurations, aes(x=frameIdx,y=frameDur)) +
             axis.text.y=element_text(size=axes_font))  # Y axis text
 ```
 
-**Display dots in a few frames**  
+## 3. Frame by frame analysis  
 We display the dots with their normalized position
 ```{r, fig.height=20, fig.width=20}
 totFrames <- data[,max(frameIdx)]
@@ -113,12 +108,13 @@ numFramesToPlot <- totFrames
 g <- ggplot(data[frameIdx < numFramesToPlot+1], aes(x=xpos, y=ypos)) +
   geom_point(aes(col=frameIdx),size=6) + xlim(0,1) + ylim(0,1)
 # Add Title and Labels
-g + labs(title=paste("Dots from first ",numFramesToPlot," frames",sep = ''),
+g + coord_fixed() +  # coord_fixed is to get square aspect
+    labs(title=paste("Dots from first ",numFramesToPlot," frames",sep = ''),
          subtitle=paste("From",dataTag,"dataset",sep=" "),
          y="normalized ypos",
          x="normalized xpos",
          color="frame") + 
-  theme(plot.title=element_text(size=40,family="American Typewriter",
+    theme(plot.title=element_text(size=40,family="American Typewriter",
                                 color="tomato", lineheight=1.2),  # title
         plot.subtitle=element_text(size=30, family="American Typewriter"),  # subtitle
         plot.caption=element_text(size=30),  # caption
@@ -137,7 +133,8 @@ g <- ggplot(data[frameIdx < numFramesToPlot+1], aes(x=xpos, y=ypos)) +
   scale_shape_manual(values=c(3, 0, 2)) + # refs for shapes: http://www.sthda.com/english/wiki/ggplot2-point-shapes  &   https://stackoverflow.com/a/34361768
   xlim(0,1) + ylim(0,1)
 # Add Title and Labels
-g + labs(title=paste("Dots from first ",numFramesToPlot," frames",sep = ''),
+g + coord_fixed() +
+  labs(title=paste("Dots from first ",numFramesToPlot," frames",sep = ''),
          subtitle=paste("From",dataTag,"dataset",sep=" "),
          y="normalized ypos",
          x="normalized xpos",
