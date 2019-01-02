@@ -2,15 +2,15 @@
 	{
 		"name": "dotsStimExperiments",
 		"type": "git",
-		"update": "never",
+		"update": "",
 		"url": "https://github.com/aernesto/dotsStimExperiments.git"
 	},
 	{
 		"name": "lmc_forked",
-        "flavor": "return_dots_matrix",
+        "flavor": "Adrian_Tests",
 		"type": "git",
 		"url": "https://github.com/aernesto/Lab-Matlab-Control.git",
-		"toolboxRoot": "#lmc_forked_return_dots_matrix" 
+		"toolboxRoot": "#lmc_forked_Adrian_Tests" 
 	},
 	{
 		"name": "lmu_forked",
