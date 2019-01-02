@@ -20,7 +20,7 @@ dotsParams.xCenter = 0;
 dotsParams.density = 1;
 dotsParams.direction = 0;
 dotsParams.coherence = 100;
-dotsParams.dotsDuration = .1; % in sec
+dotsParams.dotsDuration = .5; % in sec
 dotsParams.randSeedBase = 1;
 dotsParams.coherenceSTD = 0; % I don't know what that is
 
@@ -33,10 +33,11 @@ info_frames=draw_dots(dotsParams, displayIndex);
 %% Dump all stimulus data that will be used by our data analysis in R
 
 %clear all
-fileName = 'detail_6';
-save([fileName,'.mat'])
+data_folder = '/Users/adrian/Documents/MATLAB/projects/dotsStimExperiments/data/';
+fileName = 'detail_7';
+save([data_folder,fileName,'.mat'])
 %fileToLoad = [fileName,'.mat'];
-fileToWrite = [fileName,'.csv'];
+fileToWrite = [data_folder,fileName,'.csv'];
 
 %load(fileToLoad)
 
