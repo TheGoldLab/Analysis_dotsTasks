@@ -15,7 +15,7 @@ library(ggplot2)
 ```
 Load a data file
 ```{r}
-dataTag <- "detail_7"
+dataTag <- "detail_8"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
@@ -26,7 +26,7 @@ str(data)
 Parameters of dots stimulus:  
 ```{r}
 library(knitr)
-vals <- c(1,5,10,1,0,0,1,0,100,500,1,0)  
+vals <- c(1,5,10,1,0,0,3,0,70,500,1,0)  
 params <- c("stencilNumber",
             "pixelSize", 
             "diameter",  
@@ -70,8 +70,9 @@ ggplot(data, aes(x=frameIdx,y=onsetFrame)) +
             axis.text.y=element_text(size=axes_font))  # Y axis text
 ```
 Histogram of 'skipped' frames:
+
 ```{r}
-skipSize <- c(data$onsetFrame[1],diff(data$onsetFrame)) - 1 # subtract 1 as no frame is skipped if skipSize = 1
+skipSize <- diff(unique(data$onsetFrame)) - 1 # subtract 1 as no frame is skipped if skipSize = 1
 offset <- 0.5
 hist(skipSize, breaks = seq(from = min(skipSize) - offset, to = max(skipSize) + offset, by = 1), 
      right = FALSE)
@@ -127,10 +128,10 @@ g + coord_fixed() +  # coord_fixed is to get square aspect
 ```
 ```{r, fig.height=20, fig.width=20}
 totFrames <- data[,max(frameIdx)]
-numFramesToPlot <- 3#totFrames
+numFramesToPlot <- 6#totFrames
 g <- ggplot(data[frameIdx < numFramesToPlot+1], aes(x=xpos, y=ypos)) +
   geom_point(aes(shape=factor(frameIdx),col=frameIdx),size=6, stroke=2) +
-  scale_shape_manual(values=c(3, 0, 2)) + # refs for shapes: http://www.sthda.com/english/wiki/ggplot2-point-shapes  &   https://stackoverflow.com/a/34361768
+  scale_shape_manual(values=c(3, 0, 2, 1, 4, 5)) + # refs for shapes: http://www.sthda.com/english/wiki/ggplot2-point-shapes  &   https://stackoverflow.com/a/34361768
   xlim(0,1) + ylim(0,1)
 # Add Title and Labels
 g + coord_fixed() +
