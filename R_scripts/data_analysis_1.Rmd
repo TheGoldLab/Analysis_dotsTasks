@@ -15,16 +15,41 @@ library(ggplot2)
 ```
 Load a data file
 ```{r}
-dataTag <- "detail_1"
+dataTag <- "detail_7"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
 str(data)
 ```
-# Basic questions
-Here, I ask basic questions about the stimulus produced [here](https://github.com/aernesto/dotsStimExperiments/releases).
+# Stimulus used in this script
+[Tag](https://github.com/aernesto/dotsStimExperiments/releases) name: **`r dataTag`**.  
+Parameters of dots stimulus:  
+```{r}
+library(knitr)
+vals <- c(1,5,10,1,0,0,1,0,100,500,1,0)  
+params <- c("stencilNumber",
+            "pixelSize", 
+            "diameter",  
+            "speed",
+            "yCenter",  
+            "xCenter", 
+            "density",  
+            "direction",
+            "coherence",  
+            "dotsDuration", 
+            "randSeedBase", 
+            "coherenceSTD")
+dotsParam <- data.table(par= params, val = vals)
+kable(dotsParam, format='html', align = c('l','c'), digits = 0,
+      col.names = c("par","val"))
+```
 
-**Display frame number as stored by snow-dots**
+
+
+
+
+# Basic questions
+## 1. Display frame number as stored by snow-dots
 ```{r}
 axes_labels_font <- 18
 axes_font <- 15
@@ -48,13 +73,19 @@ ggplot(data, aes(x=frameIdx,y=onsetFrame)) +
             axis.text.x=element_text(size=axes_font),  # X axis text
             axis.text.y=element_text(size=axes_font))  # Y axis text
 ```
-The jumps in `onsetFrame` at `isTight=0` frames are *???*
+Histogram of 'skipped' frames:
+```{r}
+skipSize <- c(data$onsetFrame[1],diff(data$onsetFrame)) - 1 # subtract 1 as no frame is skipped if skipSize = 1
+offset <- 0.5
+hist(skipSize, breaks = seq(from = min(skipSize) - offset, to = max(skipSize) + offset, by = 1), 
+     right = FALSE)
+```
+
 
 
 **What are the sequences of time intervals `swapTime(n) - onsetTime(n)` and `onsetTime(n+1) - swapTime(n)`?**  
-Note: clearly I am not understanding something important here.
 ```{r}
-frameDurations <- data[,.(frameDur=swapTime - onsetTime), by=frameIdx]
+frameDurations <- data[,.(frameDur=onsetTime-swapTime), by=frameIdx]
 ggplot(frameDurations, aes(x=frameIdx,y=frameDur)) +
   geom_line(size=.2) +
   geom_point(size=2) +
@@ -75,21 +106,7 @@ ggplot(frameDurations, aes(x=frameIdx,y=frameDur)) +
 ```
 
 **Display dots in a few frames**  
-Let us first recall the parameters of the dots used in this dataset:  
-    stencilNumber: 1 (not modeled here)  
-        pixelSize: ?  
-         diameter: ?  
-            speed: 1  
-          yCenter: 0  
-          xCenter: 0  
-          density: 1  
-        direction: ?  
-        coherence: 100  
-     dotsDuration: 1  
-     randSeedBase: 1  
-     coherenceSTD: ?  
-
-Now we display the dots with their normalized position
+We display the dots with their normalized position
 ```{r, fig.height=20, fig.width=20}
 totFrames <- data[,max(frameIdx)]
 numFramesToPlot <- totFrames
