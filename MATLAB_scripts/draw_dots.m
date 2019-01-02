@@ -1,6 +1,6 @@
 function ret = draw_dots(dotsParams, displayIndex)
 
-% create a kinetogram
+%% create a kinetogram
 clean = dotsDrawableDotKinetogram();
 
 clean.stencilNumber = dotsParams.stencilNumber;
