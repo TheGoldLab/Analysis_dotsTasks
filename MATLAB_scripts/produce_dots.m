@@ -17,9 +17,9 @@ dotsParams.diameter = 10;
 dotsParams.speed = 1;
 dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
-dotsParams.density = 1;
+dotsParams.density = 3;
 dotsParams.direction = 0;
-dotsParams.coherence = 100;
+dotsParams.coherence = 70;
 dotsParams.dotsDuration = .5; % in sec
 dotsParams.randSeedBase = 1;
 dotsParams.coherenceSTD = 0; % I don't know what that is
@@ -34,7 +34,7 @@ info_frames=draw_dots(dotsParams, displayIndex);
 
 %clear all
 data_folder = '/Users/adrian/Documents/MATLAB/projects/dotsStimExperiments/data/';
-fileName = 'detail_7';
+fileName = 'detail_8';
 save([data_folder,fileName,'.mat'])
 %fileToLoad = [fileName,'.mat'];
 fileToWrite = [data_folder,fileName,'.csv'];
