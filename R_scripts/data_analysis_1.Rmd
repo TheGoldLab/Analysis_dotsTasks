@@ -15,7 +15,7 @@ library(ggplot2)
 ```
 Load a data file
 ```{r}
-dataTag <- "detail_8"
+dataTag <- "detail_10"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
@@ -25,23 +25,24 @@ str(data)
 [Tag](https://github.com/aernesto/dotsStimExperiments/releases) name: **`r dataTag`**.  
 Parameters of dots stimulus:  
 ```{r}
-library(knitr)
-vals <- c(1,5,10,1,0,0,3,0,70,500,1,0)  
-params <- c("stencilNumber",
-            "pixelSize", 
-            "diameter",  
-            "speed",
-            "yCenter",  
-            "xCenter", 
-            "density",  
-            "direction",
-            "coherence",  
-            "dotsDuration", 
-            "randSeedBase", 
-            "coherenceSTD")
-dotsParam <- data.table(par= params, val = vals)
-kable(dotsParam, format='html', align = c('l','c'), digits = 0,
-      col.names = c("par","val"))
+#library(knitr)
+  # .(stencilNumber, 
+  #             pixelSize,
+  #             diameter,
+  #             speed,
+  #             yCenter,
+  #             xCenter,
+  #             density,
+  #             direction,
+  #             coherence,
+  #             dotsDuration,
+  #             randSeedBase, 
+  #             coherenceSTD)
+params <- data[,head(.SD,1), by = iter, .SDcols = stencilNumber:coherenceSTD]
+params
+#dotsParam <- data.table(par= params, val = vals)
+#kable(dotsParam, format='html', align = c('l','c'), digits = 0,
+#      col.names = c("par","val"))
 ```
 
 # Basic questions
