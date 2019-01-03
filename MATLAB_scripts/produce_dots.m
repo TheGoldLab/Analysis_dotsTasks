@@ -4,7 +4,7 @@ clear all
 
 
 data_folder = '/Users/adrian/Documents/MATLAB/projects/dotsStimExperiments/data/';
-fileName = 'detail_9';
+fileName = 'detail_10';
 fffs = {'tomerge_1','tomerge_2'};
 
 %fileToLoad = [fileName,'.mat'];
@@ -31,7 +31,8 @@ colNames={...
     'iter', ...
     'dotIdx', ...
     'xpos', ...
-    'ypos'};
+    'ypos', ...
+    'isCoherent'};
 
 numCols=length(colNames);
 numIter = 2;
@@ -49,7 +50,7 @@ numIter = 2;
 dotsParams.stencilNumber = 1;
 dotsParams.pixelSize = 5;
 dotsParams.diameter = 10;
-dotsParams.speed = 1;
+dotsParams.speed = 2;
 dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
 dotsParams.density = 3;
@@ -77,33 +78,22 @@ paramVec = [...
 displayIndex = 1;
 
 
-
-
-
-
 %% Draw the dots
 for jjj = 1:numIter
     info_frames=draw_dots(dotsParams, displayIndex);
-    
-    
+        
 %% Dump all stimulus data that will be used by our data analysis in R
-    
-    
-    
+   
     %load(fileToLoad)
     
     % count number of frames actually drawn
     numFrames=count_frames(info_frames);
     
-    
     % build matrix that will be dumped as a csv file
     
     bigNumber = 10000 * numFrames; % overestimate of the number of dots
     dataMatrix = zeros(bigNumber,numCols);
-    
-    
-    
-    
+       
     matrixRow = 1;
     
     for frameIdx = 1:numFrames
@@ -112,14 +102,19 @@ for jjj = 1:numIter
         % 2-by-numDots matrix for current frame
         dotsMatrix = currFrame.dotsFrameMatrix;
         
+        % number of rows to dump into csv file for this frame
         numRowsForThisFrame = size(dotsMatrix,2);
+        
+        % 1-by-numDots boolean vector containing a 1 if dot is coherent on
+        % this frame
+        cohDots = currFrame.cohDotsBool;
         
         % prepare all but last 3 cols of the 'standard row' to fill
         standardRow = [paramVec, frameIdx, currFrame.onsetTime, currFrame.onsetFrame,...
             currFrame.swapTime, currFrame.isTight, jjj];
         
         for dotIdx = 1:numRowsForThisFrame
-            varyingRow = [dotIdx, dotsMatrix(:,dotIdx)'];
+            varyingRow = [dotIdx, dotsMatrix(:,dotIdx)', cohDots(dotIdx)];
             dataMatrix(matrixRow,:) = [standardRow, varyingRow];
             matrixRow = matrixRow + 1;
         end
