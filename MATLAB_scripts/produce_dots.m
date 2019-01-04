@@ -2,9 +2,8 @@
 
 clear all
 
-
-data_folder = '/Users/adrian/Documents/MATLAB/projects/dotsStimExperiments/data/';
-fileName = 'detail_10';
+data_folder = '/Users/joshuagold/Psychophysics/Data/DotsStimulusChecks/';
+fileName = 'detail_11';
 fffs = {'tomerge_1','tomerge_2'};
 
 %fileToLoad = [fileName,'.mat'];
@@ -75,7 +74,7 @@ paramVec = [...
     dotsParams.randSeedBase, ...
     dotsParams.coherenceSTD];
 
-displayIndex = 1;
+displayIndex = 2;
 
 
 %% Draw the dots

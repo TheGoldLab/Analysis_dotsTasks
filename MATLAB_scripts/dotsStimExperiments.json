@@ -3,13 +3,14 @@
 		"name": "dotsStimExperiments",
 		"type": "git",
 		"update": "",
-		"url": "https://github.com/aernesto/dotsStimExperiments.git"
+		"url": "https://github.com/TheGoldLab/dotsStimExperiments.git"
 	},
 	{
 		"flavor": "",
-		"name": "Lab-Matlab-Control",
+		"name": "lmc_forked",
 		"type": "git",
-		"url": "https://github.com/TheGoldLab/Lab-Matlab-Control.git"
+		"url": "https://github.com/aernesto/Lab-Matlab-Control.git",
+		"toolboxRoot": "#lmc_forked"
 	},
 	{
 		"name": "mgl",
