@@ -3,12 +3,12 @@ title: "Comparison of two dots stimuli generated with same seed"
 author: "Adrian Radillo"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  html_document:
-    df_print: paged
-    toc: yes
   html_notebook:
     code_folding: hide
     css: styles.css
+    toc: yes
+  html_document:
+    df_print: paged
     toc: yes
 ---
 
@@ -19,7 +19,7 @@ library(ggplot2)
 library(htmlTable) # good ref here https://cran.r-project.org/web/packages/htmlTable/readme/README.html
 ```
 ```{r echo=FALSE}
-dataTag <- "detail_10"
+dataTag <- "detail_11"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
