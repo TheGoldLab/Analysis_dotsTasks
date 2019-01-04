@@ -2,7 +2,7 @@
 	{
 		"name": "dotsStimExperiments",
 		"type": "git",
-		"update": "never",
+		"update": "",
 		"url": "https://github.com/aernesto/dotsStimExperiments.git"
 	},
 	{

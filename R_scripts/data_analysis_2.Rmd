@@ -1,0 +1,139 @@
+---
+title: "Comparison of two dots stimuli generated with same seed"
+author: "Adrian Radillo"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+  html_notebook:
+    code_folding: hide
+    css: styles.css
+    toc: yes
+---
+
+Load required libraries
+```{r echo=FALSE}
+library(data.table)
+library(ggplot2)
+library(htmlTable) # good ref here https://cran.r-project.org/web/packages/htmlTable/readme/README.html
+```
+```{r echo=FALSE}
+dataTag <- "detail_10"
+datafile <- paste("../data/",dataTag,".csv",sep='')
+data <- fread(file=datafile, header=TRUE, sep=",")
+# uncomment next line to inspect data table
+#str(data)
+```
+# Stimulus used in this script
+[Tag](https://github.com/aernesto/dotsStimExperiments/releases) name: **`r dataTag`**.  
+Parameters of each dots stimulus:  
+```{r echo=TRUE, results = 'asis'}
+# row names for table output
+rowNames <- list("stencilNumber", 
+              "pixelSize",
+              "diameter",
+              "speed",
+              "yCenter",
+              "xCenter",
+              "density",
+              "direction",
+              "coherence",
+              "dotsDuration",
+              "randSeedBase",
+              "coherenceSTD")
+
+# extract the parameter combinations for each stimulus
+params <- data[,head(.SD,1), by = iter, .SDcols = stencilNumber:coherenceSTD]
+
+matrixForTable <- as.matrix(params, rownames = "iter")
+matrixForTable <- t(matrixForTable)
+colnames(matrixForTable) <- c("stimulus 1","stimulus 2")
+
+# output table
+htmlTable(matrixForTable)
+
+#dotsParam <- data.table(par= params, val = vals)
+#kable(dotsParam, format='html', align = c('l','c'), digits = 0,
+#      col.names = c("par","val"))
+```
+
+
+# Basic statistics of stimuli
+In the table below,   
+- `monitorFrames` doesn't count the monitor frames skipped before the first frame of the stimulus was displayed.  
+- `timeSpan` is the difference between the last and the first `swapTime` value, in msec.
+```{r echo=TRUE, results = 'asis'}
+statsTable <- data[,.(presentedFrames = max(frameIdx), 
+        monitorFrames = max(onsetFrame) - min(onsetFrame) + 1,
+        timeSpan = round(1000 * (max(swapTime) - min(swapTime)))), 
+     by=iter]
+
+matrixForTable <- as.matrix(statsTable, rownames = "iter")
+matrixForTable <- t(matrixForTable)
+matrixForTable <- cbind(matrixForTable, matrixForTable[,2] - matrixForTable[,1])
+colnames(matrixForTable) <- c("stimulus 1","stimulus 2", "difference")
+
+# output table
+htmlTable(matrixForTable)
+```
+
+Let's see if on the first frames that both stimuli got to present, the number of dots on each frame is the same. If the line below is constantly 0, it's a **WIN**!
+
+```{r}
+# max number of frames that both stimuli got to display
+numOverlapFrames <- min(matrixForTable[1,1:2])
+dotCount <- data[frameIdx <= numOverlapFrames,
+     .(numDots = .N), 
+     by = .(iter, frameIdx)]
+
+# convert from long to wide format
+dotCount <- dcast(dotCount, frameIdx ~ iter, value.var = c("iter", "numDots"))
+
+```
+
+```{r}
+# plot settings
+axes_labels_font <- 18
+axes_font <- 15
+lw <- 2
+
+# plot command itself
+ggplot(dotCount[,.(frameIdx, dotsCountDiff = numDots_2 - numDots_1)], 
+       aes(x = frameIdx, y = dotsCountDiff)) +
+  geom_line(size = lw) + 
+  labs(title="Difference in dots count on each frame",
+         subtitle=paste("From",dataTag,"dataset",sep=" ")) + 
+  theme(plot.title=element_text(size=20,
+                                    family="American Typewriter",
+                                    lineheight=1.2),  # title
+            axis.title.x=element_text(size=axes_labels_font),  # X axis title
+            axis.title.y=element_text(size=axes_labels_font),  # Y axis title
+            axis.text.x=element_text(size=axes_font),  # X axis text
+            axis.text.y=element_text(size=axes_font))  # Y axis text
+
+
+
+
+```
+
+
+# Frame-by-frame comparison of dots positions 
+Compute total distance between dots. It should be zero if all dots on all frames are identical across stimuli.
+
+```{r}
+subFrame <- data[frameIdx <= numOverlapFrames,.(iter, frameIdx, dotIdx, xpos, ypos)]
+
+# the code below with dummyCol is ugly but I don't know how to improve it...
+countRowsPerIter <- subFrame[,.(numRows = .N),by=iter]
+dummyCol <- c(1:countRowsPerIter$numRows[1],1:countRowsPerIter$numRows[2])
+subFrame <- cbind(subFrame, dummyCol)
+distanceCheckFrame <- dcast(subFrame,
+     dummyCol + frameIdx ~ iter, value.var = c("iter", "dotIdx","xpos","ypos"))
+
+# check match of x positions across stimuli
+identical(distanceCheckFrame$xpos_1, distanceCheckFrame$xpos_2)
+# same for y positions
+identical(distanceCheckFrame$ypos_1, distanceCheckFrame$ypos_2)
+```
+
