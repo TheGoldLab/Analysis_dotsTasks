@@ -30,7 +30,7 @@ function MotionEnergy_1(stim, nx, nt)
 
 % Step 1a: Define the space axis of the filters
 
-max_x =2.0;         %Half-width of filter (deg)
+max_x =5.0;         %Half-width of filter (deg)
 dx = (max_x*2)/nx;  %Spatial sampling interval of filter (deg)
 
 % A row vector holding spatial sampling intervals
