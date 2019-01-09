@@ -4,7 +4,7 @@ clear all
 
 
 data_folder = '/Users/adrian/Documents/MATLAB/projects/dotsStimExperiments/data/';
-fileName = 'detail_18';
+fileName = 'detail_19';
 fffs = {'tomerge_1','tomerge_2'};
 
 %fileToLoad = [fileName,'.mat'];
@@ -54,7 +54,7 @@ dotsParams.speed = 2;
 dotsParams.yCenter = 0;
 dotsParams.xCenter = 0;
 dotsParams.density = 80;
-dotsParams.direction = 0;
+dotsParams.direction = 180;
 dotsParams.coherence = 50;
 dotsParams.dotsDuration = .5; % in sec
 dotsParams.randSeedBase = 1;
