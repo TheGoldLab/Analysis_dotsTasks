@@ -19,7 +19,7 @@ library(ggplot2)
 library(htmlTable) # good ref here https://cran.r-project.org/web/packages/htmlTable/readme/README.html
 ```
 ```{r echo=FALSE}
-dataTag <- "detail_11"
+dataTag <- "detail_18"
 datafile <- paste("../data/",dataTag,".csv",sep='')
 data <- fread(file=datafile, header=TRUE, sep=",")
 # uncomment next line to inspect data table
@@ -48,7 +48,7 @@ params <- data[,head(.SD,1), by = iter, .SDcols = stencilNumber:coherenceSTD]
 
 matrixForTable <- as.matrix(params, rownames = "iter")
 matrixForTable <- t(matrixForTable)
-colnames(matrixForTable) <- c("stimulus 1","stimulus 2")
+colnames(matrixForTable) <- c("stimulus 1")
 
 # output table
 htmlTable(matrixForTable)
@@ -60,7 +60,17 @@ htmlTable(matrixForTable)
 The goal of this cell is to plot the number of coherent dots as a function of frame index
 ```{r}
 numCohData <- data[iter==1,.(numCoh=sum(isCoherent)),by=frameIdx]
-ggplot(numCohData, aes(x=frameIdx, y=numCoh)) + geom_point(size=2)
+ggplot(numCohData, aes(x=frameIdx, y=numCoh)) + geom_line(size=2)
+```
+We now display the Binomial distribution controlling the number of coherent dots on each frame
+```{r}
+numDotsData <- data[,.(dotCount=.N, coherence),by=frameIdx]
+numActiveDots <- as.numeric(unique(numDotsData$dotCount))
+coh_val<-as.numeric(unique(numDotsData$coherence)) / 100
+x_vals <- seq(10,42,by = 1)
+y_vals<- dbinom(x_vals,numActiveDots, coh_val)
+ggplot(data.frame(x=x_vals, y=y_vals), aes(x=x, y=y)) + geom_point() + 
+  geom_vline(xintercept=coh_val * numActiveDots)
 ```
 
 
