@@ -57,6 +57,11 @@ htmlTable(matrixForTable)
 #kable(dotsParam, format='html', align = c('l','c'), digits = 0,
 #      col.names = c("par","val"))
 ```
+The goal of this cell is to plot the number of coherent dots as a function of frame index
+```{r}
+numCohData <- data[iter==1,.(numCoh=sum(isCoherent)),by=frameIdx]
+ggplot(numCohData, aes(x=frameIdx, y=numCoh)) + geom_point(size=2)
+```
 
 
 # Basic statistics of stimuli
