@@ -20,25 +20,30 @@
 %--------------------------------------------------------------------------
 %           STEP 1: Create component spatiotemporal filters 
 %--------------------------------------------------------------------------
-function MotionEnergy_1(stim, nx, nt)
+function motion_energy=MotionEnergy_1(stim, nx, nt, max_x, max_t, plotOutput)
 % ARGS:
 %   stim           t-by-x matrix, with 2*nt+1 rows and 2*nx+1 columns
 %   nx             Number of spatial samples in the filter 
 %   nt             Number of temporal samples in the filter
+%   max_x          Half-width of spatial filter (deg)
+%   max_t          Duration of impulse response (sec)
+%   plotOutput     if true, plots will be plotted
 % NOTE: post describing this script is here:
 % http://www.georgemather.com/Model.html
 
 % Step 1a: Define the space axis of the filters
 
-max_x =5.0;         %Half-width of filter (deg)
+         
 dx = (max_x*2)/nx;  %Spatial sampling interval of filter (deg)
 
 % A row vector holding spatial sampling intervals
 x_filt=linspace(-max_x,max_x,nx);
 
+%%%%% SPATIAL FILTER PARAMETERS %%%%%%%%%
 % Spatial filter parameters
-sx=0.5;   %standard deviation of Gaussian, in deg.
-sf=1.1;  %spatial frequency of carrier, in cpd
+sx=0.1;   %standard deviation of Gaussian, in deg.
+sf=10;  %spatial frequency of carrier, in cpd
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Spatial filter response
 gauss=exp(-x_filt.^2/sx.^2);          %Gaussian envelope
@@ -46,19 +51,22 @@ even_x=cos(2*pi*sf*x_filt).*gauss;   %Even Gabor
 odd_x=sin(2*pi*sf*x_filt).*gauss;    %Odd Gabor
 
 % Step 1b: Define the time axis of the filters
-max_t=0.5;      % Duration of impulse response (sec)
+
 dt = max_t/nt;  % Temporal sampling interval (sec)
 
 % A column vector holding temporal sampling intervals
 t_filt=linspace(0,max_t,nt)';
 
+%%%%% SPATIAL FILTER PARAMETERS %%%%%%%%%
 % Temporal filter parameters
 k = 100;    % Scales the response into time units
-slow_n = 9; % Width of the slow temporal filter
-fast_n = 6; % Width of the fast temporal filter
-beta =0.9;  % Beta. Represents the weighting of the negative
+slow_n = 4; % Width of the slow temporal filter
+fast_n = 3; % Width of the fast temporal filter
+beta =0.5;  % Beta. Represents the weighting of the negative
             % phase of the temporal relative to the positive 
             % phase.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 % Temporal filter response (formula as in Adelson & Bergen, 1985, Eq. 1)
 slow_t=(k*t_filt).^slow_n .* exp(-k*t_filt).*(1/factorial(slow_n)-beta.*((k*t_filt).^2)/factorial(slow_n+2));
@@ -138,21 +146,26 @@ left_Total = LR1+LR2;
 %         STEP 7: Calculate net energy as the R-L difference
 %--------------------------------------------------------------------------
 motion_energy = right_Total - left_Total;
+if isnan(motion_energy)
+    motion_energy = 0;
+end
 
 %--------------------------------------------------------------------------
 %         SUPPLEMENTARY CODE: Display summary output and graphics
 %--------------------------------------------------------------------------
 % Display motion energy statistic
-fprintf('\n\nNet motion energy = %g\n\n',motion_energy);
+%fprintf('\n\nNet motion energy = %g\n\n',motion_energy);
 
-% Plot the stimulus
-figure (1)
-imagesc(stim); 
-colormap(gray);
-axis off
-caxis([0 1.0]);
-axis equal
-title('Stimulus');
+if plotOutput
+    % Plot the stimulus
+    figure (1)
+    imagesc(stim); 
+    colormap(gray);
+    axis off
+    caxis([0 1.0]);
+    axis equal
+    title('Stimulus');
+end
 
 % Plot the output:
 %   Generate motion contrast matrix
@@ -172,13 +185,15 @@ else
     peak = abs(mc_min);
 end
 
-figure (2)
-imagesc(motion_contrast); 
-colormap(gray);
-axis off
-caxis([-peak peak]);
-axis equal
-title('Normalised Motion Energy');
+if plotOutput
+    figure (2)
+    imagesc(motion_contrast); 
+    colormap(gray);
+    axis off
+    caxis([-peak peak]);
+    axis equal
+    title('Normalised Motion Energy');
+end
 end
 %--------------------------------------------------------------------------
 

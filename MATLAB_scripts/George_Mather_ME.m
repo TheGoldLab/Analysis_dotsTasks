@@ -1,16 +1,16 @@
 %% Experiment with George Mather's approach
 % as described here: http://www.georgemather.com/Model.html
 clear
-data_folder = '/Users/adrian/Documents/MATLAB/projects/dotsStimExperiments/data/';
-filename = 'detail_13';
-% load data outputted by produce_dots.m
-load([data_folder,filename,'.mat'])
 
+% load data outputted by produce_dots.m
+data_folder = '/Users/adrian/Documents/MATLAB/projects/dotsStimExperiments/data/';
+filename = 'detail_19';
+load([data_folder,filename,'.mat'])
 
 % count number of frames actually drawn
 numFrames=count_frames(info_frames);
 
-% boolean needed because of the structure of the ME calculation
+% boolean addTrivialFrame needed because of the structure of the ME calculation
 if ~mod(numFrames,2) % true if numFrames is even
     addTrivialFrame=true;
     length_t = numFrames+1;
@@ -33,4 +33,27 @@ if addTrivialFrame
     txMatrix=[txMatrix; zeros(1,length_x)];
 end
 
-MotionEnergy_1(txMatrix, (length_x-1)/2, (length_t-1)/2);
+nx=(length_x-1)/2;
+nt=(length_t-1)/2;
+max_x = 5; % radius of apperture in deg
+max_t = .5/10; % Duration of impulse response of temporal filter (sec) 
+
+
+me=MotionEnergy_1(txMatrix, nx, nt, max_x, max_t, true);
+fprintf('\n\nprojection onto x dimension: %g\n\n',me);
+% average 1-D ME across rows of stimulus
+running_avg = 0;
+numerator = length_x;
+for rr = 1: length_x
+    txMatrix=squeeze(xytMatrix(:,rr,:))';
+    if addTrivialFrame
+        txMatrix=[txMatrix; zeros(1,length_x)];
+    end
+    me=MotionEnergy_1(txMatrix,nx,nt,max_x,max_t, false);
+    running_avg = running_avg + me;
+    if me == 0
+        numerator = numerator - 1;
+    end
+end
+running_avg=running_avg / numerator;
+fprintf('\n\nRow-avge net motion energy = %g\n\n',running_avg);
